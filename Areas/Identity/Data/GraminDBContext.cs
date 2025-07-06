@@ -1,4 +1,5 @@
 ﻿using Gramin_Bazzar_marketplace_for_rural_Nepal_.Areas.Identity.Data;
+using Gramin_Bazzar_marketplace_for_rural_Nepal_.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,16 @@ public class GraminDBContext : IdentityDbContext<ApplicationUser>
         : base(options)
     {
     }
+//Create a table here
+public DbSet<Product>Products{ get; set; }
+    public DbSet<District> Districts { get; set; }
+    public DbSet<State> States { get; set; }
+    public DbSet<Category> Categories { get; set; }
+
+
+
+
+
 
 
     protected override void OnModelCreating(ModelBuilder builder)

@@ -15,6 +15,8 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<GraminDBContext>();
 
             // Add services to the container.
+          
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gramin Bazzar(marketplace for rural Nepal)", "Gramin Bazzar(marketplace for rural Nepal).csproj", "{CF5ED02A-8416-42BA-A596-AC0F0F24F74B}"
 EndProject
