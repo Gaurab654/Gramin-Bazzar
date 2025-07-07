@@ -26,7 +26,7 @@
                             <a class="nav-link active" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Product" asp-action="Index">Products</a>
+                            <a class="nav-link" asp-controller="ProductGM" asp-action="List">Products</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Category" asp-action="Index">Categories</a>
@@ -36,7 +36,7 @@
                                 More
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="moreDropdown">
-                                <li><a class="dropdown-item" asp-controller="ProductGM" asp-action="Add">ADD PRODUCTS</a></li>
+                                <li><a class="dropdown-item" asp-controller="ProductGM" asp-action="List">LIst Of Products</a></li>
                                 <li><a class="dropdown-item" asp-controller="Contact" asp-action="Index">Contact</a></li>
                             </ul>
                         </li>
@@ -67,6 +67,31 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+              $(document).ready(function () {
+            $("#district").prop("disabled", true);
+            $("#state").change(function () {
+                var id = $("#state").val();
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: '@Url.Action("GetDistrict", "CreateProductGM")',
+                    data: { "id": id },
+                    success: function (json, textStatus) {
+                        $("#district").empty();
+                        json = json || {};
+                        for (var i = 0; i < json.length; i++) {
+                            $("#district").append('<option value="' + json[i].distId + '">' + json[i].distName + '</option>');
+                        }
+                        $("#district").prop("disabled", false);
+                    },
+                    error: function () {
+                        alert("Data Not Found");
+                    }
+                });
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

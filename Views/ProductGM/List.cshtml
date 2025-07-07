@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Gramin_Bazzar_marketplace_for_rural_Nepal_.Models.Product>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark text-center">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().ProductName)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Description)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Price)</th>
+            <th>@Html.DisplayNameFor(model => model.First().StockQuantity)</th>
+            <th>Category</th>
+            <th>@Html.DisplayNameFor(model => model.First().SellerName)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Email)</th>
+            <th>@Html.DisplayNameFor(model => model.First().PhoneNumber)</th>
+            <th>District</th>
+            <th>State</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="align-middle text-center">
+                <td class="px-3 py-2">@item.ProductName</td>
+                <td class="px-3 py-2">@item.Description</td>
+                <td class="px-3 py-2">@item.Price</td>
+                <td class="px-3 py-2">@item.StockQuantity</td>
+                <td class="px-3 py-2">@item.Category?.CategoryType</td>
+                <td class="px-3 py-2">@item.SellerName</td>
+                <td class="px-3 py-2">@item.Email</td>
+                <td class="px-3 py-2">@item.PhoneNumber</td>
+                <td class="px-3 py-2">@item.District?.DistrictName</td>
+                <td class="px-3 py-2">@item.State?.StateName</td>
+                <td class="px-3 py-2">
+                    <a class="btn btn-warning btn-sm mb-1 w-100" asp-action="Edit" asp-route-id="@item.ProductId">Edit</a>
+                    <a class="btn btn-info btn-sm mb-1 w-100" asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                    <a class="btn btn-danger btn-sm w-100" asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

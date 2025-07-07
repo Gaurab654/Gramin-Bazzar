@@ -7,9 +7,10 @@ public partial class District
     public int DistrictId { get; set; }
 
     public string DistrictName { get; set; } = null!;
-
+    //foreign key
     public int? StateId { get; set; }
-
+    //navigation property
+    //one state can have multiple district
     public virtual State? State { get; set; }
 
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();

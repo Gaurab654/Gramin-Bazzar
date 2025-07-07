@@ -4,6 +4,7 @@ using Gramin_Bazzar_marketplace_for_rural_Nepal_.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Migrations
 {
     [DbContext(typeof(GraminDBContext))]
-    partial class GraminDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250707083700_fourth")]
+    partial class fourth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,6 +109,9 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Migrations
                     b.Property<string>("CategoryType")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
@@ -141,8 +147,9 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
+                    b.Property<string>("CategoryId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -155,13 +162,8 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PhoneNumber")
+                        .HasColumnType("int");
 
                     b.Property<int?>("Price")
                         .IsRequired()
@@ -184,8 +186,6 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ProductId");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("DistrictId");
 
@@ -359,10 +359,6 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Migrations
 
             modelBuilder.Entity("Gramin_Bazzar_marketplace_for_rural_Nepal_.Models.Product", b =>
                 {
-                    b.HasOne("Gramin_Bazzar_marketplace_for_rural_Nepal_.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
-
                     b.HasOne("Gramin_Bazzar_marketplace_for_rural_Nepal_.Models.District", "District")
                         .WithMany("Products")
                         .HasForeignKey("DistrictId")
@@ -374,8 +370,6 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Migrations
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Category");
 
                     b.Navigation("District");
 

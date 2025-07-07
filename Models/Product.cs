@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Mono.TextTemplating;
 
 namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Models
@@ -8,6 +9,7 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Models
     {
         [Key]
         public int ProductId { get; set; }
+        public string ImageName { get; set; }
         [Required]
        public String? ProductName { get; set; }
         [Required]
@@ -17,23 +19,28 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Models
         [Display(Name = "Stock Quantity in Kg")]
         [Required]
         public   decimal? StockQuantity { get; set; }
-        [Required]
-        public  String? CategoryId { get; set; }
+        
+        public  int? CategoryId { get; set; }
         [Required]
         public string? SellerName { get; set; }
-        [Required]
+        [EmailAddress]
         public string? Email { get; set; }
+  
         [Required]
-        public int PhoneNumber { get; set; }
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be 10 digits")]
+        public string? PhoneNumber { get; set; }
+
         [Required]
         public int? StateId { get; set; }
 
         [Required]
         public int? DistrictId { get; set; }
-     
-
-        public virtual District District { get; set; }
-
+        //Navigarion property
+        [ForeignKey("CategoryId")]
+        public Category ?Category { get; set; }
+        [ForeignKey("DistrictId")]
+        public virtual District? District { get; set; }
+        [ForeignKey("StateId")]
         public virtual State? State { get; set; }
 
 
