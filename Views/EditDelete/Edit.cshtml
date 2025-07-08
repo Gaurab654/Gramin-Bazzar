@@ -1,0 +1,94 @@
+﻿@model Gramin_Bazzar_marketplace_for_rural_Nepal_.ViewModel.ProductViewModel
+
+@{
+    ViewData["Title"] = "Edit Product";
+}
+
+<h2 class="text-center text-primary mb-4">Edit Product</h2>
+
+<form asp-action="Edit" asp-controller="ProductGM" enctype="multipart/form-data" method="post" class="row g-3">
+    @* Hidden field for ID *@
+    <input type="hidden" asp-for="ProductId" />
+
+    <div class="col-md-6">
+        <label asp-for="ProductName" class="form-label"></label>
+        <input asp-for="ProductName" class="form-control" />
+        <span asp-validation-for="ProductName" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="Price" class="form-label"></label>
+        <input asp-for="Price" class="form-control" type="number" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="StockQuantity" class="form-label"></label>
+        <input asp-for="StockQuantity" class="form-control" type="number" />
+        <span asp-validation-for="StockQuantity" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="CategoryId" class="form-label">Category</label>
+        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select"></select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="SellerName" class="form-label"></label>
+        <input asp-for="SellerName" class="form-control" />
+        <span asp-validation-for="SellerName" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="PhoneNumber" class="form-label"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="StateId" class="form-label">State</label>
+        <select asp-for="StateId" asp-items="ViewBag.States" class="form-select"></select>
+        <span asp-validation-for="StateId" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="DistrictId" class="form-label">District</label>
+        <select asp-for="DistrictId" asp-items="ViewBag.Districts" class="form-select"></select>
+        <span asp-validation-for="DistrictId" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="ImageFiles" class="form-label">Upload New Image (optional)</label>
+        <input asp-for="ImageFiles" class="form-control" type="file" multiple />
+        <span asp-validation-for="ImageFiles" class="text-danger"></span>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ImageName))
+    {
+        <div class="col-md-6">
+            <label class="form-label">Current Image</label><br />
+            <img src="~/productImages/@Model.ImageName" width="120" class="img-thumbnail" />
+        </div>
+    }
+
+    <div class="col-12 text-center">
+        <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

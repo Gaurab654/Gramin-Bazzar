@@ -156,7 +156,6 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
