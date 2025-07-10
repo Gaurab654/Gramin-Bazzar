@@ -34,12 +34,15 @@
                         <li class="nav-item">
                             <a class="nav-link active" asp-controller="Category" asp-action="Index">Categories</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-controller="ShoppingCart" asp-action="ViewCart">Cart</a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 More
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="moreDropdown">
-                                <li><a class="dropdown-item" asp-controller="ProductGM" asp-action="List">LIst Of Products</a></li>
+                                <li><a class="dropdown-item" asp-controller="ProductGM" asp-action="ListTobuy">List Of Products</a></li>
                                 <li><a class="dropdown-item" asp-controller="Contact" asp-action="Index">Contact</a></li>
                             </ul>
                         </li>

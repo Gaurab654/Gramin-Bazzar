@@ -69,7 +69,7 @@
 
                             <div>
                                 <a class="btn btn-warning btn-sm mb-1 w-100" asp-controller="EditDelete"asp-action="Edit" asp-route-id="@item.ProductId">Edit</a>
-                                <a class="btn btn-info btn-sm mb-1 w-100" asp-action="CartAdding" asp-route-id="@item.ProductId">Add to Cart</a>
+                              <a class="btn btn-primary btn-sm mb-1 w-100"asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@item.ProductId">Add to Cart</a>
                                 <a class="btn btn-danger btn-sm w-100" asp-controller="EditDelete" asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
                             </div>
                         </div>
