@@ -2,9 +2,11 @@
 using Gramin_Bazzar_marketplace_for_rural_Nepal_.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Controllers
 {
+    [Authorize(Roles = "Admin,Buyer")]
     public class ShoppingCartController : Controller
     {
         private readonly GraminDBContext context;

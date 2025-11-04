@@ -1,6 +1,8 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Gramin_Bazzar_marketplace_for_rural_Nepal_.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
+using Gramin_Bazzar_marketplace_for_rural_Nepal_.Services;
+
 namespace Gramin_Bazzar_marketplace_for_rural_Nepal_
 {
     public class Program
@@ -8,29 +10,35 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            var connectionString = builder.Configuration.GetConnectionString("GraminDBContextConnection") ?? throw new InvalidOperationException("Connection string 'GraminDBContextConnection' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("GraminDBContextConnection")
+                ?? throw new InvalidOperationException("Connection string 'GraminDBContextConnection' not found.");
 
-            builder.Services.AddDbContext<GraminDBContext>(options => options.UseSqlServer(connectionString));
+            // Add DbContext
+            builder.Services.AddDbContext<GraminDBContext>(options =>
+                options.UseSqlServer(connectionString));
+            builder.Services.AddScoped<RecommendationService>();//recentlya
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<GraminDBContext>();
 
-            // Add services to the container.
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            //add session
+            //  Add Identity with custom ApplicationUser
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+                options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>() // Adds Role support
+                .AddEntityFrameworkStores<GraminDBContext>()
+                .AddDefaultTokenProviders();
+
+            // 3Add session and MVC
             builder.Services.AddMemoryCache();
             builder.Services.AddSession();
-
-
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
-            app.UseSession();
 
-            // Configure the HTTP request pipeline.
+            // 4️⃣ Middleware order is important
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -39,11 +47,16 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_
 
             app.UseRouting();
 
+            app.UseAuthentication(); // ✅ Must come before Authorization
             app.UseAuthorization();
 
+            app.UseSession();
+
+            // 5️⃣ Map routes
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
             app.MapRazorPages();
             app.Run();
         }

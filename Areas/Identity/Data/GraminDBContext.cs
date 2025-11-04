@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Areas.Identity.Data;
 
-public class GraminDBContext : IdentityDbContext<ApplicationUser>
+public class GraminDBContext : IdentityDbContext<IdentityUser>
 {
     public GraminDBContext(DbContextOptions<GraminDBContext> options)
         : base(options)
@@ -18,6 +18,7 @@ public DbSet<Product>Products{ get; set; }
     public DbSet<District> Districts { get; set; }
     public DbSet<State> States { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<ApplicationUser> applicationUsers { get; set; }
     
 
     protected override void OnModelCreating(ModelBuilder builder)

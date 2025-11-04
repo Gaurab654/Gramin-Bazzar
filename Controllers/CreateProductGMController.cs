@@ -1,23 +1,26 @@
 ﻿using Gramin_Bazzar_marketplace_for_rural_Nepal_.Areas.Identity.Data;
 using Gramin_Bazzar_marketplace_for_rural_Nepal_.Models;
 using Gramin_Bazzar_marketplace_for_rural_Nepal_.ViewModel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NuGet.Protocol;
 
 namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Controllers
 {
+    [Authorize(Roles = "Admin,Seller")]
     public class CreateProductGMController : Controller
     {
-
         private readonly GraminDBContext context;
         private readonly IWebHostEnvironment env;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CreateProductGMController(GraminDBContext context, IWebHostEnvironment env)
+        public CreateProductGMController(GraminDBContext context, IWebHostEnvironment env, UserManager<ApplicationUser> userManager)
         {
-
             this.context = context;
             this.env = env;
+            _userManager = userManager;
         }
 
         public IActionResult Create()
@@ -27,6 +30,7 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Controllers
             ViewBag.States = new SelectList(states, "StateId", "StateName");
             return View();
         }
+
         public JsonResult GetDistrict(int id)
         {
             var dist = context.Districts
@@ -41,62 +45,57 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Controllers
             return Json(dist);
         }
 
-
         [HttpPost]
-        public IActionResult Create(ProductViewModel model)
+        public async Task<IActionResult> Create(ProductViewModel model)
         {
             if (ModelState.IsValid)
             {
-                if (model.ImageFiles != null && model.ImageFiles.Any())
-                {
-                    List<string> savedFileNames = new List<string>();
+                string fn = null;
 
+                if (model.ImageName != null)
+                {
+                    string ext = Path.GetExtension(model.ImageName.FileName);
+                    fn = Guid.NewGuid().ToString() + "_GaurabRai" + ext;
                     string folder = Path.Combine(env.WebRootPath, "ProductPhoto");
 
-                    foreach (var file in model.ImageFiles)
+                    if (!Directory.Exists(folder))
                     {
-                        string fn = Guid.NewGuid().ToString() + "_Gaurab_" + file.FileName;
-                        string imagepath = Path.Combine(folder, fn);
-
-                        using (var stream = new FileStream(imagepath, FileMode.Create))
-                        {
-                            file.CopyTo(stream);
-                        }
-                        savedFileNames.Add(fn);
+                        Directory.CreateDirectory(folder);
                     }
 
-                    // Now create Product and set image filename(s) - e.g., join filenames if multiple or store first one
-                    Product product = new Product()
+                    string imagepath = Path.Combine(folder, fn);
+                    using (var stream = new FileStream(imagepath, FileMode.Create))
                     {
-                        // other properties from model
-                        ProductName = model.ProductName,
-                        Description = model.Description,
-                        Price = model.Price,
-                        StockQuantity = model.StockQuantity,
-                        CategoryId = model.CategoryId,
-                        SellerName = model.SellerName,
-                        Email = model.Email,
-                        PhoneNumber = model.PhoneNumber,
-                        StateId = model.StateId,
-                        DistrictId = model.DistrictId,
-                        ImageName = string.Join(";", savedFileNames) // if you want to save multiple names in one string
-                    };
-
-                    context.Products.Add(product);
-                    context.SaveChanges();
-
-                    TempData["Message"] = "New product was added successfully.";
-                    return RedirectToAction("List", "ProductGM");
+                        model.ImageName.CopyTo(stream);
+                    }
                 }
 
-                TempData["Message"] = "Please select image(s).";
-                return View(model);
+                var user = await _userManager.GetUserAsync(User);
+
+                Product product = new Product()
+                {
+                    ProductName = model.ProductName,
+                    Description = model.Description,
+                    Price = model.Price,
+                    StockQuantity = model.StockQuantity,
+                    CategoryId = model.CategoryId,
+                    SellerName = model.SellerName,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
+                    StateId = model.StateId,
+                    DistrictId = model.DistrictId,
+                    ImageName = fn,
+                    SellerId = user.Id
+                };
+
+                context.Products.Add(product);
+                context.SaveChanges();
+
+                TempData["Message"] = "New product was added successfully.";
+                return RedirectToAction("List", "ProductGM");
             }
 
-            // Re-populate dropdowns on form redisplay
-            ViewBag.Categories = new SelectList(context.Categories.ToList(), "CategoryId", "CategoryType");
-            ViewBag.States = new SelectList(context.States.ToList(), "StateId", "StateName");
-
+            TempData["Message"] = "Please select image(s).";
             return View(model);
         }
     }

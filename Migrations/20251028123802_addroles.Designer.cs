@@ -4,6 +4,7 @@ using Gramin_Bazzar_marketplace_for_rural_Nepal_.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Migrations
 {
     [DbContext(typeof(GraminDBContext))]
-    partial class GraminDBContextModelSnapshot : ModelSnapshot
+    [Migration("20251028123802_addroles")]
+    partial class addroles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,9 +97,6 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SellerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("SellerName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -114,8 +114,6 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("DistrictId");
-
-                    b.HasIndex("SellerId");
 
                     b.HasIndex("StateId");
 
@@ -386,10 +384,6 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Gramin_Bazzar_marketplace_for_rural_Nepal_.Areas.Identity.Data.ApplicationUser", "Seller")
-                        .WithMany()
-                        .HasForeignKey("SellerId");
-
                     b.HasOne("Gramin_Bazzar_marketplace_for_rural_Nepal_.Models.State", "State")
                         .WithMany("Product")
                         .HasForeignKey("StateId")
@@ -399,8 +393,6 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("District");
-
-                    b.Navigation("Seller");
 
                     b.Navigation("State");
                 });

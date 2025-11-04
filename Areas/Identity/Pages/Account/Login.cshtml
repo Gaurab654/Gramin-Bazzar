@@ -1,80 +1,162 @@
 ﻿@page
 @model LoginModel
-
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Log In";
 }
 
-<h1>@ViewData["Title"]</h1>
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label asp-for="Input.Email" class="form-label">Email</label>
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.Password" class="form-label">Password</label>
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
-                <div class="checkbox mb-3">
-                    <label asp-for="Input.RememberMe" class="form-label">
-                        <input class="form-check-input" asp-for="Input.RememberMe" />
-                        @Html.DisplayNameFor(m => m.Input.RememberMe)
-                    </label>
-                </div>
-                <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                </div>
-                <div>
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                    </p>
-                </div>
-            </form>
-        </section>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        background: linear-gradient(to right, #e8f5e9, #f1f8e9);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .login-container {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-card {
+        background: #fff;
+        border-radius: 25px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+    }
+
+    .login-left {
+        padding: 50px;
+    }
+
+        .login-left h2 {
+            color: #2e7d32;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+        }
+
+        .login-left .btn-primary {
+            background-color: #4caf50;
+            border: none;
+            transition: 0.3s;
+        }
+
+            .login-left .btn-primary:hover {
+                background-color: #388e3c;
+            }
+
+    .login-right {
+        background: linear-gradient(135deg, #4caf50, #81c784);
+        color: white;
+        padding: 50px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+
+        .login-right h3 {
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+
+        .login-right p {
+            font-size: 1.05rem;
+            margin-top: 15px;
+            opacity: 0.9;
+        }
+
+        .login-right em {
+            color: #fffde7;
+            font-weight: 600;
+        }
+
+        .login-right .tagline {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f1f8e9;
+            margin-top: 25px;
+        }
+
+    .form-floating label {
+        color: #555;
+    }
+
+    .form-check-label {
+        color: #333;
+    }
+
+    .links a {
+        text-decoration: none;
+        color: #2e7d32;
+        transition: 0.2s;
+    }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="login-container">
+    <div class="row w-100 justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="login-card row g-0">
+
+                <!-- Left Side (Login Form) -->
+                <div class="col-md-6 login-left">
+                    <h2>Welcome Back 👋</h2>
+                    <p class="text-muted mb-4">Log in to continue exploring the best of Nepal’s local products.</p>
+
+                    <form id="account" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                            <label asp-for="Input.Email" class="form-label">Email address</label>
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+                            <label asp-for="Input.Password" class="form-label">Password</label>
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="checkbox mb-3">
+                            <label asp-for="Input.RememberMe" class="form-label">
+                                <input class="form-check-input" asp-for="Input.RememberMe" />
+                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            </label>
+                        </div>
+
+                        <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log In</button>
+
+                        <div class="mt-3 links">
+                            <p><a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a></p>
+                            <p><a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a></p>
+                            <p><a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a></p>
                         </div>
                     </form>
-                }
-            }
-        </section>
+                </div>
+
+                <!-- Right Side (About Section) -->
+                <div class="col-md-6 login-right">
+                    <h3>About Gramin Bazzar</h3>
+                    <p>
+                        <strong>Gramin Bazzar</strong> is Nepal’s digital gateway to rural prosperity.
+                        We bring together farmers, artisans, and local producers from across the hills and mountains —
+                        offering natural and handmade treasures to conscious buyers nationwide.
+                    </p>
+                    <p>
+                        Discover authentic <em>millets, barley, dhaka fabrics, organic honey, and handmade crafts</em>
+                        that tell the story of Nepal’s land and culture.
+                    </p>
+                    <p class="tagline">🌱 Supporting Local. Sustaining Rural Nepal.</p>
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>
 

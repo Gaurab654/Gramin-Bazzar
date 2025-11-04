@@ -9,14 +9,12 @@
 @if (TempData["Message"] != null)
 {
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>Alert Message!!!</strong>@TempData["Message"]
+        <strong>Alert Message!!!</strong> @TempData["Message"]
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
 
 <h2 class="text-center mb-4">Available Products</h2>
-
-
 
 <div class="container mt-5">
     <h2 class="text-center mb-5 text-primary">Explore Local Products</h2>
@@ -24,36 +22,14 @@
     <div class="row g-5">
         @foreach (var item in Model)
         {
-            var imageList = item.ImageName?.Split(';', StringSplitOptions.RemoveEmptyEntries) ?? new string[0];
-
             <div class="col-12">
-                <div class="card shadow-lg p-4">
+                <div class="card shadow-lg p-4 mb-4">
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <div id="carousel-@item.ProductId" class="carousel slide" data-bs-ride="carousel">
-                                <div class="carousel-inner">
-                                    @{
-                                        var isFirst = true;
-                                        foreach (var image in imageList)
-                                        {
-                                            <div class="carousel-item @(isFirst ? "active" : "")">
-                                                <img src="~/ProductPhoto/@image" class="img-fluid rounded w-100" style="max-height: 100%; object-fit: contain;" alt="Product Image" />
-
-                                            </div>
-                                            isFirst = false;
-                                        }
-                                    }
-                                </div>
-                                @if (imageList.Length > 1)
-                                {
-                                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@item.ProductId" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon"></span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-@item.ProductId" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon"></span>
-                                    </button>
-                                }
-                            </div>
+                            <img src="~/ProductPhoto/@item.ImageName"
+                                 class="img-fluid rounded w-100"
+                                 style="max-height: 100%; object-fit: contain;"
+                                 alt="Product Image" />
                         </div>
 
                         <div class="col-md-6 d-flex flex-column justify-content-between">
@@ -67,11 +43,34 @@
                                 <p><strong>Location:</strong> @item.District?.DistrictName, @item.State?.StateName</p>
                             </div>
 
-                            <div>
-                                <a class="btn btn-warning btn-sm mb-1 w-100" asp-controller="EditDelete"asp-action="Edit" asp-route-id="@item.ProductId">Edit</a>
-                              <a class="btn btn-primary btn-sm mb-1 w-100"asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@item.ProductId">Add to Cart</a>
-                                <a class="btn btn-danger btn-sm w-100" asp-controller="EditDelete" asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                            <div class="mb-3">
+                                <a class="btn btn-primary btn-sm mb-1 w-100" asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@item.ProductId">Add to Cart</a>
+                                <a class="btn btn-danger btn-sm w-100 mb-1" asp-controller="EditDelete" asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
                             </div>
+
+                            @* Recommended Products *@
+                            <div>
+                                <h6 class="text-secondary">Recommended for you:</h6>
+                                <div class="row">
+                                    @{
+                                        var recommendedProducts = ViewBag.Recommendations[item.ProductId] as List<Gramin_Bazzar_marketplace_for_rural_Nepal_.Models.Product>;
+                                        if (recommendedProducts != null)
+                                        {
+                                            foreach (var rec in recommendedProducts)
+                                            {
+                                                <div class="col-4 mb-2">
+                                                    <div class="card p-2">
+                                                        <img src="~/ProductPhoto/@rec.ImageName" class="img-fluid rounded w-100" style="height:80px; object-fit:cover;" />
+                                                        <p class="mb-0 text-center small">@rec.ProductName</p>
+                                                        <a class="btn btn-primary btn-sm mb-1 w-100" asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@item.ProductId">Add to Cart</a>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

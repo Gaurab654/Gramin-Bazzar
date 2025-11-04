@@ -9,10 +9,10 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.ViewModel
         [Key]
         public int ProductId { get; set; }
         [Required]
-        [Display(Name = "please insert pictures of the product")]
+        [Display(Name = "please insert Image of the product")]
         [NotMapped]
-        public List<IFormFile>? ImageFiles { get; set; }
-        public string? ImageName { get; set; }
+        
+        public IFormFile? ImageName { get; set; }
 
         [Required]
         public String? ProductName { get; set; }

@@ -71,7 +71,7 @@
                     <dd class="col-sm-8">@Model.District?.DistrictName, @Model.State?.StateName</dd>
                 </dl>
 
-                <form  asp-controller="EditDelete"asp-action="DeleteConfirmed" asp-route-id="@Model.ProductId" method="post">
+                <form asp-controller="EditDelete" asp-action="DeleteConfirmed" asp-route-id="@Model.ProductId" method="post">
                     <input type="submit" value="Delete" class="btn btn-danger w-100 mb-2" />
                     <a asp-controller="ProductGM" asp-action="List" class="btn btn-secondary w-100">Cancel</a>
                 </form>

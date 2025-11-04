@@ -1,17 +1,19 @@
 using System.Diagnostics;
 using Gramin_Bazzar_marketplace_for_rural_Nepal_.Areas.Identity.Data;
 using Gramin_Bazzar_marketplace_for_rural_Nepal_.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Controllers
 {
+    [Authorize(Roles = "Admin,Seller,Buyer")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly GraminDBContext context;
 
 
-        public HomeController(ILogger<HomeController> logger,GraminDBContext context)
+        public HomeController(ILogger<HomeController> logger, GraminDBContext context)
         {
             _logger = logger;
             this.context = context;
