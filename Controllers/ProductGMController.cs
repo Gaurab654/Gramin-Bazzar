@@ -39,6 +39,7 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Controllers
             // Pass both products and recommendations to view using ViewBag
             ViewBag.Recommendations = recommendations;
 
+            object context = null;
             return View(products);
         }
     }

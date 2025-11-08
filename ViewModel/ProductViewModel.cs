@@ -12,7 +12,7 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.ViewModel
         [Display(Name = "please insert Image of the product")]
         [NotMapped]
         
-        public IFormFile? ImageName { get; set; }
+        public IFormFile? Image { get; set; }
 
         [Required]
         public String? ProductName { get; set; }

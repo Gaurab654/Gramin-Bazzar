@@ -4,6 +4,7 @@ using Gramin_Bazzar_marketplace_for_rural_Nepal_.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NuGet.Protocol;
 
@@ -50,24 +51,14 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Controllers
         {
             if (ModelState.IsValid)
             {
-                string fn = null;
+                string fileName = null;
 
-                if (model.ImageName != null)
+                if (model.Image!= null)
                 {
-                    string ext = Path.GetExtension(model.ImageName.FileName);
-                    fn = Guid.NewGuid().ToString() + "_GaurabRai" + ext;
-                    string folder = Path.Combine(env.WebRootPath, "ProductPhoto");
-
-                    if (!Directory.Exists(folder))
-                    {
-                        Directory.CreateDirectory(folder);
-                    }
-
-                    string imagepath = Path.Combine(folder, fn);
-                    using (var stream = new FileStream(imagepath, FileMode.Create))
-                    {
-                        model.ImageName.CopyTo(stream);
-                    }
+                    String f = Path.Combine(env.WebRootPath, "ProductPhoto");
+                    fileName = Guid.NewGuid().ToString() + "_" + model.Image.FileName;
+                    string filePath=Path.Combine(f, fileName);
+                    model.Image.CopyTo(new FileStream(filePath, FileMode.Create));
                 }
 
                 var user = await _userManager.GetUserAsync(User);
@@ -84,7 +75,7 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Controllers
                     PhoneNumber = model.PhoneNumber,
                     StateId = model.StateId,
                     DistrictId = model.DistrictId,
-                    ImageName = fn,
+                    ImageName = fileName,
                     SellerId = user.Id
                 };
 

@@ -11,9 +11,7 @@ namespace Gramin_Bazzar_marketplace_for_rural_Nepal_.Models
         [Key]
         public int ProductId { get; set; }
         [Required]
-        [Display(Name = "please insert pictures of the product")]
-        [NotMapped]
-        
+        [Display(Name = "please insert pictures of the product")] 
         public string? ImageName { get; set; }
 
         [Required]
